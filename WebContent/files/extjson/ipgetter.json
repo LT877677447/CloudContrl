@@ -1,0 +1,25 @@
+{
+  "proxyipurls": [
+    {
+      "stop": true,
+      "name": "牛魔王",
+      "id": "niumowang",
+      "url": "http://192.168.3.116:9090/zfyuncontrol/testgetips?type=1&count=10"
+    },
+    {
+      "stop": true,
+      "name": "孙悟空",
+      "id": "sunwukong",
+      "url": "http://www.feilongip.com/Tools/proxyIP.ashx?Type=294e1679504e0ebdd5e2027191365d06&Order=73457&qty=20"
+    },
+    {
+      "stop": true,
+      "name": "自有ip库",
+      "id": "test1",
+      "url": "http://192.168.3.116:5010/fetch/?count=5"
+    }
+  ],
+  "max_ipcache_cont": 60,
+  "advids": [],
+  "version": 1
+}

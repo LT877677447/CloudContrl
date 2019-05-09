@@ -1,0 +1,171 @@
+{
+	"_STATIC_FILE_IP": "192.168.3.116",
+	"STATIC_FILE_PORT": "8090",
+	"_FILE_SERVER_IP": "192.168.3.116",
+	"_FILE_SERVER_PORT": "9090",
+	"_YUN_SERVER_IP": "192.168.3.116",
+	"_YUN_SERVER_PORT": "9090",
+	"server_err_retry_timeout": 30,
+	"smscode_timeout": 300,
+	"smspf_yima": {
+		"pass": "dasheng01",
+		"getmobileurl": "http://api.fxhyd.cn/UserInterface.aspx?action=getmobile",
+		"loginurl": "http://api.fxhyd.cn/UserInterface.aspx?action=login",
+		"getsmsurl": "http://api.fxhyd.cn/UserInterface.aspx?action=getsms",
+		"username": "qswl168",
+		"sendsmsurl": "http://api.fxhyd.cn/UserInterface.aspx?action=sendsms"
+	},
+	"apkfileurl": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage/files/apks/",
+	"scriptfileurl": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage/files/scripts/",
+	"zip_download_url": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage/files/zips/",
+	"loginDaemonInterval": 60,
+	"refreshstep": 10,
+	"remainjobprocwork": 0,
+	"rooturl": "http://[YUN_SERVER_IP]:[YUN_SERVER_PORT]/zfyuncontrol",
+	"zip_upload_url": "http://[FILE_SERVER_IP]:[FILE_SERVER_PORT]/yunfilesctrl/zipupload",
+	
+	"phone_info": {
+		"kNetworkType.Values": [
+			0,
+			1
+		],
+		"kNetworkType.Ratios": [
+			50,
+			50
+		],
+		"kWIFI.Capabilities": [
+			"[WPA-PSK-CCMP]",
+			"[WPA2-PSK-CCMP]",
+			"[WPA-PSK-CCMP+TKIP]",
+			"[WPA2-PSK-CCMP+TKIP]",
+			"[WPA2-PSK-CCMP-preauth]"
+		]
+	},
+	
+	"update_rom_server": {
+		"latest_version": 131,
+		"update_url": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/romserver/RomServer.apk",
+		"update_devices": []
+	},
+	
+	
+	"update_rom_files": {
+		"latest_version": 132,
+		"cmd.acmd": {
+			"latest_version": 132,
+			"execute_command": "input keyevent 26",
+			"update_devices": [],
+			"reboot": false
+		},
+		"_cmd.bcmd": {
+			"latest_version": 85,
+			"execute_command": "reboot",
+			"update_devices": [],
+			"reboot": false
+		},
+		"_cmd.ccmd": {
+			"latest_version": 85,
+			"execute_command": "reboot -p",
+			"update_devices": [],
+			"reboot": false
+		},
+		"_cmd.dcmd": {
+			"latest_version": 82,
+			"execute_command": "input keyevent 26",
+			"update_devices": [],
+			"reboot": false
+		},
+		"_zip.azip": {
+			"latest_version": 48,
+			"update_url-cm_cancro-4.4.4": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/update/system_framework_service.zip",
+			"update_devices": [],
+			"isZip": true,
+			"reboot": true
+		},
+		"/system/app/RomServer_signed_aligned.apk": {
+			"latest_version": 130,
+			"update_url": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/romserver/RomServer_signed_aligned.apk",
+			"update_devices": [],
+			"reboot": true
+		},
+		"/data/local/tmp/swipe_up.sh": {
+			"latest_version": 70,
+			"update_url": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/system/swipe_up.sh",
+			"update_devices": [],
+			"reboot": false
+		},
+		"/data/local/tmp/swipe_down.sh": {
+			"latest_version": 70,
+			"update_url": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/system/swipe_down.sh",
+			"update_devices": [],
+			"reboot": false
+		},
+		"/data/local/rom/org.wuji.apk": {
+			"latest_version": 129,
+			"update_url": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/update/org.wuji.apk",
+			"update_devices": [],
+			"reboot": false
+		},
+		"/data/local/rom/org.proxydroid.apk": {
+			"latest_version": 129,
+			"update_url": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/update/org.proxydroid.apk",
+			"update_devices": [],
+			"reboot": false
+		},
+		"_/system/framework/services.jar": {
+			"latest_version": 46,
+			"update_url-cm_cancro-4.4.4": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/system/services.jar",
+			"update_devices": [],
+			"reboot": true
+		},
+		"/system/framework/framework.jar": {
+			"latest_version": 96,
+			"update_url-cm_cancro-4.4.4": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/system/framework.jar",
+			"update_url-cm_cancro-6.0.1": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/system_cm13/framework.jar",
+			"update_devices": [],
+			"reboot": true
+		},
+		"/system/framework/framework2.jar": {
+			"latest_version": 94,
+			"update_url-cm_cancro-4.4.4": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/system/framework2.jar",
+			"update_devices": [],
+			"reboot": true
+		},
+		"_/system/framework/ext.jar": {
+			"latest_version": 39,
+			"update_url-cm_cancro-4.4.4": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/system/ext.jar",
+			"update_devices": [],
+			"reboot": true
+		},
+		"/system/lib/libandroid_runtime.so": {
+			"latest_version": 97,
+			"update_url-cm_cancro-4.4.4": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/system/libandroid_runtime.so",
+			"update_url-cm_cancro-6.0.1": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/system_cm13/libandroid_runtime.so",
+			"update_devices": [],
+			"reboot": true
+		}
+	},
+	
+	"debug_devices": "",
+	
+	"client_log_save_path": "D:/WebServer/client_log/",
+	
+	"log_config": {
+	
+		"devices": [
+			"phone001",
+			"M001"
+		],
+	
+		"show_log_panel": false,
+		
+		"log_panel_config": {
+			"TextSize":11,
+			"TextColor":-1,
+			"BackgroundColor":-2147483648
+		},
+		
+		"post_now": true,
+		"log_type": 2
+	}
+}

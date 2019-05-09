@@ -1,0 +1,334 @@
+{
+  "General_Installed_APPS": {
+    "com.baidu.searchbox": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.baidu.searchbox",
+      "versionName": "11.2.0.10",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.baidu.searchbox-1/base.apk",
+        "dataDir": "/data/data/com.baidu.searchbox",
+        "publicSourceDir": "/data/app/com.baidu.searchbox-1/base.apk",
+        "className": "com.baidu.searchbox.SplashActivity"
+      },
+      "versionCode": 46662912,
+      "lastUpdateTime": 1543804895935
+    },
+    "com.tencent.mm": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.tencent.mm",
+      "versionName": "7.0.0",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.tencent.mm-1/base.apk",
+        "dataDir": "/data/data/com.tencent.mm",
+        "publicSourceDir": "/data/app/com.tencent.mm-1/base.apk",
+        "className": "com.tencent.mm.ui.LauncherUI"
+      },
+      "versionCode": 1380,
+      "lastUpdateTime": 1543804895935
+    },
+    "com.tencent.mobileqq": {
+      "firstInstallTime": 1543404895847,
+      "packageName": "com.tencent.mobileqq",
+      "versionName": "7.0.0",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.tencent.mobileqq-1/base.apk",
+        "dataDir": "/data/data/ccom.tencent.mobileqq",
+        "publicSourceDir": "/data/app/com.tencent.mobileqq-1/base.apk",
+        "className": "com.tencent.mobileqq.activity.SplashActivity"
+      },
+      "versionCode": 1381,
+      "lastUpdateTime": 1543404895847
+    },
+    "com.eg.android.AlipayGphone": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.eg.android.AlipayGphone",
+      "versionName": "10.1.52.6022",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.eg.android.AlipayGphone-1/base.apk",
+        "dataDir": "/data/data/com.eg.android.AlipayGphone",
+        "publicSourceDir": "/data/app/com.eg.android.AlipayGphone-1/base.apk",
+        "className": "com.eg.android.AlipayGphone.AlipayLogin"
+      },
+      "versionCode": 136,
+      "lastUpdateTime": 1543804895935
+    },
+    "com.taobao.taobao": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.taobao.taobao",
+      "versionName": "8.1.0",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.taobao.taobao-1/base.apk",
+        "dataDir": "/data/data/com.taobao.taobao",
+        "publicSourceDir": "/data/app/com.taobao.taobao-1/base.apk",
+        "className": "com.taobao.ju.android.ui.main.TabMainActivity"
+      },
+      "versionCode": 214,
+      "lastUpdateTime": 1543804895935
+    }
+  },
+  "HONOR": {
+    "com.huawei.fans": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.huawei.fans",
+      "versionName": "9.0.2.302",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.huawei.fans-1/base.apk",
+        "dataDir": "/data/data/com.huawei.fans",
+        "publicSourceDir": "/data/app/com.huawei.fans-1/base.apk",
+        "className": "com.huawei.fans.activity.MainActivity"
+      },
+      "versionCode": 90002032,
+      "lastUpdateTime": 1543804895935
+    },
+    "com.vmall.client": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.vmall.client",
+      "versionName": "1.6.22.0",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.vmall.client-1/base.apk",
+        "dataDir": "/data/data/com.vmall.client",
+        "publicSourceDir": "/data/app/com.vmall.client-1/base.apk",
+        "className": "com.vmall.client.splash.fragment.SplashActivity"
+      },
+      "versionCode": 450,
+      "lastUpdateTime": 1543804895935
+    },
+    "com.android.browser": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.android.browser",
+      "versionName": "5.0.141",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.android.browser-1/base.apk",
+        "dataDir": "/data/data/com.android.browser",
+        "publicSourceDir": "/data/app/com.android.browser-1/base.apk",
+        "className": "com.tencent.mtt.SplashActivity"
+      },
+      "versionCode": 50100141,
+      "lastUpdateTime": 1543804895935
+    }
+  },
+    "HUAWEI": {
+    "com.huawei.fans": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.huawei.fans",
+      "versionName": "9.0.2.302",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.huawei.fans-1/base.apk",
+        "dataDir": "/data/data/com.huawei.fans",
+        "publicSourceDir": "/data/app/com.huawei.fans-1/base.apk",
+        "className": "com.huawei.fans.activity.MainActivity"
+      },
+      "versionCode": 90002032,
+      "lastUpdateTime": 1543804895935
+    },
+    "com.vmall.client": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.vmall.client",
+      "versionName": "1.6.22.0",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.vmall.client-1/base.apk",
+        "dataDir": "/data/data/com.vmall.client",
+        "publicSourceDir": "/data/app/com.vmall.client-1/base.apk",
+        "className": "com.vmall.client.splash.fragment.SplashActivity"
+      },
+      "versionCode": 450,
+      "lastUpdateTime": 1543804895935
+    },
+    "com.android.browser": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.android.browser",
+      "versionName": "5.0.141",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.android.browser-1/base.apk",
+        "dataDir": "/data/data/com.android.browser",
+        "publicSourceDir": "/data/app/com.android.browser-1/base.apk",
+        "className": "com.tencent.mtt.SplashActivity"
+      },
+      "versionCode": 50100141,
+      "lastUpdateTime": 1543804895935
+    }
+  },
+  "SAMSUNG": {
+    "com.sec.android.app.sbrowser": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.sec.android.app.sbrowser",
+      "versionName": "8.2.01.2",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.sec.android.app.sbrowser-1/base.apk",
+        "dataDir": "/data/data/com.sec.android.app.sbrowser",
+        "publicSourceDir": "/data/app/com.sec.android.app.sbrowser-1/base.apk",
+        "className": "com.sec.android.app.sbrowser.SBrowserMainActivity"
+      },
+      "versionCode": 820102100,
+      "lastUpdateTime": 1543804895935
+    },
+    "com.sec.android.app.samsungapps": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.sec.android.app.samsungapps",
+      "versionName": "4.2.21.2",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.sec.android.app.samsungapps-1/base.apk",
+        "dataDir": "/data/data/com.sec.android.app.samsungapps",
+        "publicSourceDir": "/data/app/com.sec.android.app.samsungapps-1/base.apk",
+        "className": "com.sec.android.app.samsungapps.SamsungAppsMainActivity"
+      },
+      "versionCode": 422102110,
+      "lastUpdateTime": 1543804895935
+    }
+  },
+  "MI": {
+    "com.android.browser": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.android.browser",
+      "versionName": "9.0.3",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.android.browser-1/base.apk",
+        "dataDir": "/data/data/com.android.browser",
+        "publicSourceDir": "/data/app/com.android.browser-1/base.apk",
+        "className": "com.android.browser.BrowserActivity"
+      },
+      "versionCode": 20170717,
+      "lastUpdateTime": 1543804895935
+    },
+    "com.xiaomi.shop": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.xiaomi.shop",
+      "versionName": "4.4.2.0103.r1",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.xiaomi.shop-1/base.apk",
+        "dataDir": "/data/data/com.xiaomi.shop",
+        "publicSourceDir": "/data/app/com.xiaomi.shop-1/base.apk",
+        "className": "com.xiaomi.shop.activity.MainTabActivity"
+      },
+      "versionCode": 20190103,
+      "lastUpdateTime": 1543804895935
+    }
+  },
+  "GOOGLE": {
+    "com.android.chrome": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.android.chrome",
+      "versionName": "70.0.3538.110",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.android.chrome-1/base.apk",
+        "dataDir": "/data/data/com.android.chrome",
+        "publicSourceDir": "/data/app/com.android.chrome-1/base.apk",
+        "className": ""
+      },
+      "versionCode": 353811052,
+      "lastUpdateTime": 1543804895935
+    }
+  },
+  "COOLPAD": {
+    "com.qihoo.browser": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.qihoo.browser",
+      "versionName": "8.2.0.132",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.qihoo.browser-1/base.apk",
+        "dataDir": "/data/data/com.qihoo.browser",
+        "publicSourceDir": "/data/app/com.qihoo.browser-1/base.apk",
+        "className": "com.qihoo.browser.launcher.LauncherActivity"
+      },
+      "versionCode": 11027,
+      "lastUpdateTime": 1543804895935
+    },
+    "com.qihoo.appstore": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.qihoo.appstore",
+      "versionName": "8.0.30",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.qihoo.appstore-1/base.apk",
+        "dataDir": "/data/data/com.qihoo.appstore",
+        "publicSourceDir": "/data/app/com.qihoo.appstore-1/base.apk",
+        "className": "com.qihoo.appstore.home.launcherActivity"
+      },
+      "versionCode": 300080030,
+      "lastUpdateTime": 1543804895935
+    }
+  },
+  "ZTE": {
+    "zte.com.market": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "zte.com.market",
+      "versionName": "9.14.0",
+      "applicationInfo": {
+        "sourceDir": "/data/app/zte.com.market-1/base.apk",
+        "dataDir": "/data/data/zte.com.market",
+        "publicSourceDir": "/data/app/zte.com.market-1/base.apk",
+        "className": "zte.com.market.LoginActivity"
+      },
+      "versionCode": 9900140,
+      "lastUpdateTime": 1543804895935
+    },
+    "com.ume.browser": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.ume.browser",
+      "versionName": "6.1.20181230",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.ume.browser-1/base.apk",
+        "dataDir": "/data/data/com.ume.browser",
+        "publicSourceDir": "/data/app/com.ume.browser-1/base.apk",
+        "className": "com.ume.browser.MainActivity"
+      },
+      "versionCode": 20181230,
+      "lastUpdateTime": 1543804895935
+    }
+  },
+  "LENOVO": {
+    "com.lenovo.browser": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.lenovo.browser",
+      "versionName": "8.0.0.2",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.lenovo.browser-1/base.apk",
+        "dataDir": "/data/data/com.lenovo.browser",
+        "publicSourceDir": "/data/app/com.lenovo.browser-1/base.apk",
+        "className": "com.lenovo.browser.BrowserActivity"
+      },
+      "versionCode": 80000002,
+      "lastUpdateTime": 1543804895935
+    },
+    "com.lenovo.leos.appstore": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.lenovo.leos.appstore",
+      "versionName": "9.10.10.88",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.lenovo.leos.appstore-1/base.apk",
+        "dataDir": "/data/data/com.lenovo.leos.appstore",
+        "publicSourceDir": "/data/app/com.lenovo.leos.appstore-1/base.apk",
+        "className": "com.lenovo.leos.appstore.activities.Main"
+      },
+      "versionCode": 91010,
+      "lastUpdateTime": 1543804895935
+    }
+  },
+  "GiONEE": {
+    "com.android.browser": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.android.browser",
+      "versionName": "5.2.0.d",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.android.browser-1/base.apk",
+        "dataDir": "/data/data/com.android.browser",
+        "publicSourceDir": "/data/app/com.android.browser-1/base.apk",
+        "className": "com.muyou.mylibrary.service.MajorSystemServiceMU"
+      },
+      "versionCode": 1070424662,
+      "lastUpdateTime": 1543804895935
+    },
+    "com.qihoo.appstore": {
+      "firstInstallTime": 1543804895935,
+      "packageName": "com.qihoo.appstore",
+      "versionName": "8.0.30",
+      "applicationInfo": {
+        "sourceDir": "/data/app/com.qihoo.appstore-1/base.apk",
+        "dataDir": "/data/data/com.qihoo.appstore",
+        "publicSourceDir": "/data/app/com.qihoo.appstore-1/base.apk",
+        "className": "com.qihoo.appstore.home.launcherActivity"
+      },
+      "versionCode": 300080030,
+      "lastUpdateTime": 1543804895935
+    }
+  }
+}
