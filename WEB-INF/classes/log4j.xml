@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">   
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>   
+  
+    <appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">   
+        <layout class="org.apache.log4j.PatternLayout">   
+            <param name="ConversionPattern" value="%d [%t] %-5p [%c] - %m%n"/>   
+        </layout>   
+    </appender>   
+  
+    <appender name="INFO" class="org.apache.log4j.DailyRollingFileAppender">   
+        <param name="File" value="D:/WebServer/log4j/zfyuncontrol/info.log"/> 
+        <param name="Encoding" value="UTF-8" />   
+        <param name="Append" value="true"/>        
+         <!--  <param name="rollingStyle" value="Date" /> -->
+        <param name="datePattern" value="yyyy-MM-dd-'Info.txt'" />
+        <layout class="org.apache.log4j.PatternLayout">   
+            <param name="ConversionPattern" value="%d [%t] %-5p [%c] - %m%n"/>   
+        </layout>   
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">   
+            <param name="LevelMin" value="DEBUG" />   
+            <param name="LevelMax" value="INFO" />   
+        </filter>   
+    </appender> 
+    
+    <appender name="WARN" class="org.apache.log4j.DailyRollingFileAppender">   
+        <param name="File" value="D:/WebServer/log4j/zfyuncontrol/warning.log"/> 
+        <param name="Encoding" value="UTF-8" />   
+        <param name="Append" value="true"/>        
+         <!--  <param name="rollingStyle" value="Date" /> -->
+        <param name="datePattern" value="yyyy-MM-dd-'warning.txt'" />
+        <layout class="org.apache.log4j.PatternLayout">   
+            <param name="ConversionPattern" value="%d [%t] %-5p [%c] - %m%n"/>   
+        </layout>   
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">   
+            <param name="LevelMin" value="WARN" />   
+            <param name="LevelMax" value="WARN" />   
+        </filter>   
+    </appender>     
+  
+  
+    <appender name="ERROR" class="org.apache.log4j.DailyRollingFileAppender">   
+        <param name="File" value="D:/WebServer/log4j/zfyuncontrol/error.log"/>  
+        <param name="Encoding" value="UTF-8" />   
+        <param name="Append" value="true"/>       
+      <!--  <param name="rollingStyle" value="Date" /> -->
+       <param name="datePattern" value="yyyy-MM-dd-'Error.log'" />
+        <layout class="org.apache.log4j.PatternLayout">   
+            <param name="ConversionPattern" value="%d [%t] %-5p [%c] - %m%n"/>   
+        </layout>   
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">   
+            <param name="LevelMin" value="ERROR" />   
+            <param name="LevelMax" value="ERROR" />   
+        </filter>   
+    </appender>   
+  
+    <root>   
+        <priority value="debug"/>   
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="INFO"/>
+        <appender-ref ref="WARN"/>
+        <appender-ref ref="ERROR"/>   
+    </root>   
+</log4j:configuration>   
