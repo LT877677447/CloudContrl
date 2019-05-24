@@ -10,17 +10,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.junit.Test;
 
 import com.kilotrees.model.po.tb_weixinaccount;
 import com.kilotrees.model.po.tb_weixinlink;
 import com.kilotrees.model.po.tb_weixinlinkFail;
 import com.kilotrees.model.po.tb_weixinlog;
 import com.kilotrees.services.ErrorLog_service;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 public class WeixinDao {
 	private static Logger log = Logger.getLogger(WeixinDao.class);
@@ -636,5 +639,8 @@ public class WeixinDao {
 		}
 		return num;
 	}
+	
+	
+	
 
 }

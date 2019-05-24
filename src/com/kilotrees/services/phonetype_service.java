@@ -119,6 +119,41 @@ public class phonetype_service {
 		}
 	}
 	
+	/**
+	 * 根据手机型号限定模拟手机信息参数，这里从数据库中获取网上搜出来的手机信息，然后替换imei,imsi,mac这些可变参数，组成json返回
+	 * 象sdk.version，cpu，屏幕参数必须是原始的，不能变。
+	 * 
+	 * @param typesLimits,以后处理
+	 * @return
+	 * @throws JSONException
+	 */
+	public JSONObject randPhoneInfo() {
+		JSONObject phoneInfo = new JSONObject();
+		
+		phonetype phoneRandom = getPhoneRandom();
+		if (phoneRandom != null) {
+			try {
+				phoneInfo = new JSONObject(phoneRandom.getPhone_info());
+				
+				JSONObject staticInfo = getStaticMatchingInfo(phoneInfo);
+				JSONObjectUtil.mergeJSONObject(phoneInfo, staticInfo);
+				
+				JSONObject stableInfo = reandomTheStablePhoneInfo(phoneInfo);
+				JSONObjectUtil.mergeJSONObject(phoneInfo, stableInfo);
+				
+				JSONObject unstableInfo = reandomTheUnstablePhoneInfo(phoneInfo);
+				JSONObjectUtil.mergeJSONObject(phoneInfo, unstableInfo);
+				
+				synchronizeSameValues(phoneInfo);
+				
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return phoneInfo;
+	}
+	
 	// 强匹配信息，机型对应的CPU、内存大小(也可变，但一般是固定的几个值)、
 	public static JSONObject getStaticMatchingInfo(JSONObject phoneInfoTemplate){
 		JSONObject result = new JSONObject();
@@ -331,7 +366,7 @@ public class phonetype_service {
 	}
 	
 	// 新增与留存时都要做改变的Hook信息
-	public static JSONObject reandomTheUnstablePhoneInfo(JSONObject phoneInfoTemplate, JSONObject appInfo, boolean isRemainTask) throws JSONException {
+	public static JSONObject reandomTheUnstablePhoneInfo(JSONObject phoneInfoTemplate) throws JSONException {
 		JSONObject result = new JSONObject();
 		
 		// 1. Connectivity -------------------------------------------------
@@ -355,7 +390,8 @@ public class phonetype_service {
 		boolean isSimCardInserted = true;
 		
 		activeNetworkInfo.put("mNetworkType", mNetworkType); 
-		String mExtraInfo = isUsingWIFI ? InfoGenUtil.genName() : "cmnet";	// [wifiname] or cmnet
+		// [wifiname] or cmnet
+		String mExtraInfo = isUsingWIFI ? InfoGenUtil.genName() : "cmnet";
 		String mTypeName  = isUsingWIFI ? "WIFI" : "mobile";
 		if (isUsingWIFI) {
 			activeNetworkInfo.put("mExtraInfo", mExtraInfo); 
@@ -437,8 +473,10 @@ public class phonetype_service {
 		telephonyInfo.put("Telephony.SimSerialNumber", simSerialNumber);
 		telephonyInfo.put("Telephony.IccSerialNumber", simSerialNumber);
 		
-		telephonyInfo.put("Telephony.Line1Number", "150" + InfoGenUtil.gen2(8));
-		telephonyInfo.put("Telephony.Msisdn", "150" + InfoGenUtil.gen2(8));
+		String lineNumber = "150" + InfoGenUtil.gen2(8);
+		telephonyInfo.put("Telephony.Line1Number", lineNumber);
+		telephonyInfo.put("Telephony.Line1NumberForDisplay", lineNumber);
+		telephonyInfo.put("Telephony.Msisdn", lineNumber);
 
 		telephonyInfo.put("Telephony.hasIccCard", true);
 		telephonyInfo.put("Telephony.VoiceNetworkType", 16);
@@ -452,8 +490,8 @@ public class phonetype_service {
 		JSONObject connectionInfo = wifiInfo.optJSONObject("Wifi.ConnectionInfo");
 		String macAddress = connectionInfo.optString("MacAddress");
 		String bssid = connectionInfo.optString("BSSID");
+		String wifiName = activeNetworkInfo.optString("mExtraInfo");
 		
-		String wifiName = mExtraInfo;
 		Integer ipAddrConnected = InfoGenUtil.getOneRandomIntIP();
 		if (isUsingWIFI) {
 			// Wifi.ConnectionInfo
@@ -502,52 +540,8 @@ public class phonetype_service {
 		}
 		
 		// wifi scan results
-		JSONArray wifiScanResults = new JSONArray();
+		JSONArray wifiScanResults = createWifiScanResults(bssid, wifiName, macAddress);
 		wifiInfo.put("Wifi.ScanResults", wifiScanResults);
-		int count = new Random().nextInt(10) + 8;
-		long timestamp = new Random().nextInt(10000) + 50000; 
-		for (int i = 0; i < count; i++) {
-			JSONObject json = new JSONObject();
-			json.put("capabilities", InfoGenUtil.genCapabilities());
-			json.put("distance", -1);
-			json.put("BSSID", InfoGenUtil.genMac());
-			json.put("level", -30 - new Random().nextInt(20));
-			json.put("distanceSd", -1);
-			json.put("SSID", InfoGenUtil.genName());
-			json.put("timestamp", timestamp *  1000);
-			json.put("frequency", ((new Random().nextInt(2) == 1) ? 2000 : 5000 ) + new Random().nextInt(1000));
-			
-			// contain connected info itself
-			if (i == 0) {
-				json.put("capabilities", InfoGenUtil.genCapabilities());
-				json.put("distance", -1);
-				json.put("BSSID", bssid);
-				json.put("level", -30 - new Random().nextInt(20));
-				json.put("distanceSd", -1);
-				json.put("SSID", wifiName);
-				json.put("timestamp", timestamp *  1000);
-				json.put("frequency", ((new Random().nextInt(2) == 1) ? 2000 : 5000 ) + new Random().nextInt(1000));
-				json.put("MacAddress", macAddress);
-			}
-			
-			wifiScanResults.put(json);
-		}
-		
-		// put the scan result to appinfo, android end use the data in appinfo first
-		JSONArray appScanResults = null;
-		if (isRemainTask) {
-			boolean isChangeTheWifiScanResult = new Random().nextInt(10) == 1;
-			if (!isChangeTheWifiScanResult) {
-				appScanResults = phoneInfoTemplate.optJSONArray("Wifi.ScanResults");
-			}
-		}
-		if (appScanResults == null) {
-			appScanResults = wifiScanResults;
-		}
-		if (appInfo != null) {
-			appInfo.put("Wifi.ScanResults", appScanResults);
-		}
-		
 		
 		// 5. Battery -------------------------------------------------
 		JSONObject batteryInfo = JSONObjectUtil.optJSONWithKeyPrefix(phoneInfoTemplate, "Battery.");
@@ -584,39 +578,167 @@ public class phonetype_service {
 		
 		return result;
 	}
+	
+	// 设置是否使用WIFI
+	public static void setPhoneInfoIsUsingWifi(JSONObject phoneInfo, boolean isUsingWIFI) {
+		try {
 
-	/**
-	 * 根据手机型号限定模拟手机信息参数，这里从数据库中获取网上搜出来的手机信息，然后替换imei,imsi,mac这些可变参数，组成json返回
-	 * 象sdk.version，cpu，屏幕参数必须是原始的，不能变。
-	 * 
-	 * @param typesLimits,以后处理
-	 * @return
-	 * @throws JSONException
-	 */
-	public JSONObject randPhoneInfo() {
-		JSONObject phinfo = new JSONObject();
-		
-		phonetype phoneRandom = getPhoneRandom();
-		if (phoneRandom != null) {
-			try {
-				phinfo = new JSONObject(phoneRandom.getPhone_info());
-				
-				JSONObject staticInfo = getStaticMatchingInfo(phinfo);
-				JSONObjectUtil.mergeJSONObject(phinfo, staticInfo);
-				
-				JSONObject stableInfo = reandomTheStablePhoneInfo(phinfo);
-				JSONObjectUtil.mergeJSONObject(phinfo, stableInfo);
-				
-				JSONObject unstableInfo = reandomTheUnstablePhoneInfo(phinfo, null, false);
-				JSONObjectUtil.mergeJSONObject(phinfo, unstableInfo);
-				
-				
-			} catch (JSONException e) {
-				e.printStackTrace();
+			// 0:MOBILE; 1:WIFI
+			JSONObject activeNetworkInfo = phoneInfo.optJSONObject("Connectivity.ActiveNetworkInfo");
+
+			// [wifiname] or cmnet
+			int mNetworkType = isUsingWIFI ? 1 : 0;
+			activeNetworkInfo.put("mNetworkType", mNetworkType);
+			String mExtraInfo = isUsingWIFI ? InfoGenUtil.genName() : "cmnet";
+			String mTypeName = isUsingWIFI ? "WIFI" : "mobile";
+			if (isUsingWIFI) {
+				activeNetworkInfo.put("mExtraInfo", mExtraInfo);
+				activeNetworkInfo.put("mTypeName", mTypeName);
+				activeNetworkInfo.put("mReason", "");
+				activeNetworkInfo.put("mSubtypeName", "");
+				activeNetworkInfo.put("mSubtype", 0);
+			} else {
+				activeNetworkInfo.put("mExtraInfo", mExtraInfo);
+				activeNetworkInfo.put("mTypeName", mTypeName);
+				activeNetworkInfo.put("mReason", "2GVoiceCallEnded");
+				activeNetworkInfo.put("mSubtypeName", "EDGE");
+				activeNetworkInfo.put("mSubtype", 2);
 			}
+
+			if (isUsingWIFI) {
+				// WIFI Is ["wlan0"], 4g Is []
+				phoneInfo.put("Connectivity.TetherableIfaces", new JSONArray(new String[] { "wlan0" }));
+
+			} else {
+				
+				JSONObject activeNetworkQuotaInfo = new JSONObject();
+				phoneInfo.put("Connectivity.ActiveNetworkQuotaInfo", activeNetworkQuotaInfo);
+				activeNetworkQuotaInfo.put("mSoftLimitBytes", 214748364);
+				activeNetworkQuotaInfo.put("mHardLimitBytes", -1);
+				activeNetworkQuotaInfo.put("NO_LIMIT", -1);
+				activeNetworkQuotaInfo.put("mEstimatedBytes", 386779);
+
+				// WIFI Is ["wlan0"], 4g Is []
+				phoneInfo.put("Connectivity.TetherableIfaces", new JSONArray());
+
+			}
+			
+			// important!!! 客户端多数通过 Connectivity.NetworkInfo 的 mNetworkType 来判断是 WIFI 和 4G
+			JSONObject networkInfo = new JSONObject();
+			phoneInfo.put("Connectivity.NetworkInfo", networkInfo);
+			networkInfo.put("mState", 4);	// Connected
+			networkInfo.put("mNetworkType", mNetworkType);
+			networkInfo.put("mSubtype", 0);
+			networkInfo.put("mSubtypeName", "");
+			networkInfo.put("mExtraInfo", mExtraInfo);
+			networkInfo.put("mTypeName", mTypeName);
+			networkInfo.put("mIsFailover", false);
+			networkInfo.put("mIsAvailable", true);
+
+			// 3. Telephony -------------------------------------------------
+			phoneInfo.put("Telephony.DataActivity", isUsingWIFI ? 0 : 3);
+			phoneInfo.put("Telephony.DataNetworkType", isUsingWIFI ? 0 : 2);
+			phoneInfo.put("Telephony.NetworkType", isUsingWIFI ? 0 : 2);
+
+			// 4. WIFI -------------------------------------------------
+			JSONObject connectionInfo = phoneInfo.optJSONObject("Wifi.ConnectionInfo");
+			String wifiName = activeNetworkInfo.optString("mExtraInfo");
+
+			Integer ipAddrConnected = InfoGenUtil.getOneRandomIntIP();
+			if (isUsingWIFI) {
+				// Wifi.ConnectionInfo
+				connectionInfo.put("LinkSpeed", new Random().nextInt(100) + 433);
+				connectionInfo.put("NetworkId", 0);
+				connectionInfo.put("HiddenSSID", false);
+				connectionInfo.put("Rssi", 0 - new Random().nextInt(100));
+				connectionInfo.put("IpAddress", ipAddrConnected);
+				connectionInfo.put("MeteredHint", false);
+				connectionInfo.put("WifiSsid", wifiName);
+				connectionInfo.put("SSID", wifiName);
+
+				// Wifi.DhcpInfo
+				int gatewayIpAddress = InfoGenUtil.getGatewayFromIntIP(ipAddrConnected);
+				JSONObject dhcpInfo = new JSONObject();
+				phoneInfo.put("Wifi.DhcpInfo", dhcpInfo);
+				dhcpInfo.put("netmask", 16777215); // 255.255.255.0, 0xFFFFFF
+				dhcpInfo.put("dns2", 0);
+				dhcpInfo.put("dns1", gatewayIpAddress);
+				dhcpInfo.put("serverAddress", gatewayIpAddress);
+				dhcpInfo.put("ipAddress", ipAddrConnected);
+				dhcpInfo.put("gateway", gatewayIpAddress);
+				dhcpInfo.put("leaseDuration", (new Random().nextInt(50) + 50) * 1000);
+
+			} else {
+				// Wifi.ConnectionInfo
+				connectionInfo.put("LinkSpeed", -1);
+				connectionInfo.put("NetworkId", -1);
+				connectionInfo.put("HiddenSSID", false);
+				connectionInfo.put("Rssi", -200);
+				connectionInfo.put("IpAddress", 0);
+				connectionInfo.put("MeteredHint", false);
+				connectionInfo.put("WifiSsid", "");
+				connectionInfo.put("SSID", "");
+
+				// Wifi.DhcpInfo
+				JSONObject dhcpInfo = new JSONObject();
+				phoneInfo.put("Wifi.DhcpInfo", dhcpInfo);
+				dhcpInfo.put("netmask", -1);
+				dhcpInfo.put("dns2", 0);
+				dhcpInfo.put("dns1", 0);
+				dhcpInfo.put("serverAddress", 0);
+				dhcpInfo.put("ipAddress", 0);
+				dhcpInfo.put("gateway", 0);
+				dhcpInfo.put("leaseDuration", 0);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
+	}
+	
+	// 随机生成WIFI扫描列表 
+	public static JSONArray createWifiScanResults(String connectedBSSID, String connectedWifiName, String MacAddress) {
+		JSONArray wifiScanResults = new JSONArray();
 		
-		return phinfo;
+		try {
+			int count = new Random().nextInt(10) + 8;
+			long timestamp = new Random().nextInt(10000) + 50000; 
+			for (int i = 0; i < count; i++) {
+				JSONObject json = new JSONObject();
+				json.put("capabilities", InfoGenUtil.genCapabilities());
+				json.put("distance", -1);
+				json.put("BSSID", InfoGenUtil.genMac());
+				json.put("level", -30 - new Random().nextInt(20));
+				json.put("distanceSd", -1);
+				json.put("SSID", InfoGenUtil.genName());
+				json.put("timestamp", timestamp *  1000);
+				json.put("frequency", ((new Random().nextInt(2) == 1) ? 2000 : 5000 ) + new Random().nextInt(1000));
+				
+				// contain connected info itself
+				if (i == 0) {
+					json.put("capabilities", InfoGenUtil.genCapabilities());
+					json.put("distance", -1);
+					json.put("BSSID", connectedBSSID);
+					json.put("level", -30 - new Random().nextInt(20));
+					json.put("distanceSd", -1);
+					json.put("SSID", connectedWifiName);
+					json.put("timestamp", timestamp *  1000);
+					json.put("frequency", ((new Random().nextInt(2) == 1) ? 2000 : 5000 ) + new Random().nextInt(1000));
+					json.put("MacAddress", MacAddress);
+				}
+				
+				wifiScanResults.put(json);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return wifiScanResults;
 	}
 
+	public static void  synchronizeSameValues(JSONObject phoneInfo) throws JSONException  {
+		String model = phoneInfo.optString("Build.MODEL");
+		phoneInfo.put("SystemProperties.ro.product.model", model);
+	}
 }

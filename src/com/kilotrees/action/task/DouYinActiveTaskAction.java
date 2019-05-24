@@ -20,6 +20,7 @@ import com.kilotrees.model.bo.TaskBase;
 import com.kilotrees.model.po.ServerConfig;
 import com.kilotrees.model.po.vpninfo;
 import com.kilotrees.services.JsonActionService;
+import com.kilotrees.services.phonetype_service;
 import com.kilotrees.util.InfoGenUtil;
 import com.kilotrees.util.JSONObjectUtil;
 
@@ -89,7 +90,8 @@ public class DouYinActiveTaskAction implements ITaskAction {
 		}
 
 		// socket5
-		String devicesUsingWuJiVPN = "B6012 B6001 B6002 B6003 B6004";// 使用无极设备
+		String devicesUsingWuJiVPN = "A6001 A6002 A6003 A6004 A6005 A6006 A6007 A6008 A6009 A6010 A6011 A6012 A6013 A6014 A6015"
+				   +" B6001 B6002 B6003 B6004 B6005 B6006 B6007 B6008 B6009 B6010 B6011 B6012 B6013 B6014 B6015";// 使用无极设备
 		Boolean isUsingWuJiVPN = devicesUsingWuJiVPN.contains(dev_tag);
 		if (!isUsingWuJiVPN) {
 			// socket5
@@ -143,7 +145,7 @@ public class DouYinActiveTaskAction implements ITaskAction {
 		JSONObject phoneInfo = adtask.optJSONObject("phoneInfo");
 		phoneInfo.remove("Build.VERSION.SDK");
 		phoneInfo.remove("Build.VERSION.SDK_INT");
-		changePhoneInfoToWifi(phoneInfo);
+		phonetype_service.setPhoneInfoIsUsingWifi(phoneInfo, true);
 
 //		JSONObject newPhoneInfo = changePhoneInfo(phoneInfo);
 //		adtask.put("phoneInfo", newPhoneInfo);
@@ -155,6 +157,7 @@ public class DouYinActiveTaskAction implements ITaskAction {
 			fileContentsInfo = new JSONObject();
 			phoneInfo.put("Files.Contents", fileContentsInfo);
 		}
+		
 		String pathWlan0Address = "/sys/class/net/wlan0/address";
 		String pathWlan0AddressLink = "/sys/devices/fb000000.qcom,wcnss-wlan/net/wlan0/address";
 		fileContentsInfo.put(pathWlan0Address, macAddress);
@@ -181,138 +184,6 @@ public class DouYinActiveTaskAction implements ITaskAction {
 		} else {
 			//活跃失败
 			DouYinActiveTaskDao.failActive(phoneNumber);
-		}
-	}
-
-	public static void changePhoneInfoToWifi(JSONObject phoneInfoTemplate) {
-		try {
-
-			JSONObject connectivityInfo = JSONObjectUtil.optJSONWithKeyPrefix(phoneInfoTemplate, "Connectivity.");
-			JSONObject activeNetworkInfo = connectivityInfo.optJSONObject("Connectivity.ActiveNetworkInfo");
-
-			int mNetworkType = 1;
-			boolean isUsingWIFI = mNetworkType == 1;
-
-			activeNetworkInfo.put("mNetworkType", mNetworkType);
-			String mExtraInfo = isUsingWIFI ? InfoGenUtil.genName() : "cmnet";
-			String mTypeName = isUsingWIFI ? "WIFI" : "mobile";
-			if (isUsingWIFI) {
-				activeNetworkInfo.put("mExtraInfo", mExtraInfo);
-				activeNetworkInfo.put("mTypeName", mTypeName);
-				activeNetworkInfo.put("mReason", "");
-				activeNetworkInfo.put("mSubtypeName", "");
-				activeNetworkInfo.put("mSubtype", 0);
-			} else {
-				activeNetworkInfo.put("mExtraInfo", mExtraInfo);
-				activeNetworkInfo.put("mTypeName", mTypeName);
-				activeNetworkInfo.put("mReason", "2GVoiceCallEnded");
-				activeNetworkInfo.put("mSubtypeName", "EDGE");
-				activeNetworkInfo.put("mSubtype", 2);
-			}
-
-			if (isUsingWIFI) {
-				// WIFI Is ["wlan0"], 4g Is []
-				connectivityInfo.put("Connectivity.TetherableIfaces", new JSONArray(new String[] { "wlan0" }));
-
-			} else {
-				JSONObject activeNetworkQuotaInfo = new JSONObject();
-				connectivityInfo.put("Connectivity.ActiveNetworkQuotaInfo", activeNetworkQuotaInfo);
-				activeNetworkQuotaInfo.put("mSoftLimitBytes", 214748364);
-				activeNetworkQuotaInfo.put("mHardLimitBytes", -1);
-				activeNetworkQuotaInfo.put("NO_LIMIT", -1);
-				activeNetworkQuotaInfo.put("mEstimatedBytes", 386779);
-
-				// WIFI Is ["wlan0"], 4g Is []
-				connectivityInfo.put("Connectivity.TetherableIfaces", new JSONArray());
-
-			}
-
-			JSONObject networkInfo = new JSONObject();
-			connectivityInfo.put("Connectivity.NetworkInfo", networkInfo);
-			networkInfo.put("mState", 4); // Connected
-			networkInfo.put("mNetworkType", mNetworkType);
-			networkInfo.put("mSubtype", 0);
-			networkInfo.put("mSubtypeName", "");
-			networkInfo.put("mExtraInfo", mExtraInfo);
-			networkInfo.put("mTypeName", mTypeName);
-			networkInfo.put("mIsFailover", false);
-			networkInfo.put("mIsAvailable", true);
-
-			// 3. Telephony -------------------------------------------------
-			JSONObject telephonyInfo = JSONObjectUtil.optJSONWithKeyPrefix(phoneInfoTemplate, "Telephony.");
-			telephonyInfo.put("Telephony.DataActivity", isUsingWIFI ? 0 : 3);
-			telephonyInfo.put("Telephony.DataNetworkType", isUsingWIFI ? 0 : 2);
-			telephonyInfo.put("Telephony.NetworkType", isUsingWIFI ? 0 : 2);
-
-			// ICCID(Integrate circuit card identity) 集成电路卡识别码(固化在手机SIM卡中) ICCID
-			// 为IC 卡的唯一识别号码，共有20 位数字组成
-			String simSerialNumber = "898600" + InfoGenUtil.gen2(14);
-			telephonyInfo.put("Telephony.SimSerialNumber", simSerialNumber);
-			telephonyInfo.put("Telephony.IccSerialNumber", simSerialNumber);
-
-			telephonyInfo.put("Telephony.Line1Number", "150" + InfoGenUtil.gen2(8));
-			telephonyInfo.put("Telephony.Msisdn", "150" + InfoGenUtil.gen2(8));
-
-			telephonyInfo.put("Telephony.hasIccCard", true);
-			telephonyInfo.put("Telephony.VoiceNetworkType", 16);
-			telephonyInfo.put("Telephony.GroupIdLevel1", "ffffffff");
-			telephonyInfo.put("Telephony.Line1AlphaTag", "@@@@@@@@@@@@@@");
-			telephonyInfo.put("Telephony.isDataConnectivityPossible", true);
-
-			// 4. WIFI -------------------------------------------------
-			JSONObject wifiInfo = JSONObjectUtil.optJSONWithKeyPrefix(phoneInfoTemplate, "Wifi.");
-			JSONObject connectionInfo = wifiInfo.optJSONObject("Wifi.ConnectionInfo");
-
-			String wifiName = mExtraInfo;
-			Integer ipAddrConnected = InfoGenUtil.getOneRandomIntIP();
-			if (isUsingWIFI) {
-				// Wifi.ConnectionInfo
-				connectionInfo.put("LinkSpeed", new Random().nextInt(100) + 433);
-				connectionInfo.put("NetworkId", 0);
-				connectionInfo.put("HiddenSSID", false);
-				connectionInfo.put("Rssi", 0 - new Random().nextInt(100));
-				connectionInfo.put("IpAddress", ipAddrConnected);
-				connectionInfo.put("MeteredHint", false);
-				connectionInfo.put("WifiSsid", wifiName);
-				connectionInfo.put("SSID", wifiName);
-
-				// Wifi.DhcpInfo
-				int gatewayIpAddress = InfoGenUtil.getGatewayFromIntIP(ipAddrConnected);
-				JSONObject dhcpInfo = new JSONObject();
-				wifiInfo.put("Wifi.DhcpInfo", dhcpInfo);
-				dhcpInfo.put("netmask", 16777215); // 255.255.255.0, 0xFFFFFF
-				dhcpInfo.put("dns2", 0);
-				dhcpInfo.put("dns1", gatewayIpAddress);
-				dhcpInfo.put("serverAddress", gatewayIpAddress);
-				dhcpInfo.put("ipAddress", ipAddrConnected);
-				dhcpInfo.put("gateway", gatewayIpAddress);
-				dhcpInfo.put("leaseDuration", (new Random().nextInt(50) + 50) * 1000);
-
-			} else {
-				// Wifi.ConnectionInfo
-				connectionInfo.put("LinkSpeed", -1);
-				connectionInfo.put("NetworkId", -1);
-				connectionInfo.put("HiddenSSID", false);
-				connectionInfo.put("Rssi", -200);
-				connectionInfo.put("IpAddress", 0);
-				connectionInfo.put("MeteredHint", false);
-				connectionInfo.put("WifiSsid", "");
-				connectionInfo.put("SSID", "");
-
-				// Wifi.DhcpInfo
-				JSONObject dhcpInfo = new JSONObject();
-				wifiInfo.put("Wifi.DhcpInfo", dhcpInfo);
-				dhcpInfo.put("netmask", -1);
-				dhcpInfo.put("dns2", 0);
-				dhcpInfo.put("dns1", 0);
-				dhcpInfo.put("serverAddress", 0);
-				dhcpInfo.put("ipAddress", 0);
-				dhcpInfo.put("gateway", 0);
-				dhcpInfo.put("leaseDuration", 0);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 

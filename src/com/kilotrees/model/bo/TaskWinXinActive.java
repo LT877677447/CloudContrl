@@ -8,6 +8,7 @@ import com.kilotrees.model.po.advtaskinfo;
 
 public class TaskWinXinActive extends TaskBase {
 	// private Integer autoid; in super
+	private String weixinAccount;
 	private String phoneNumber;
 	private String password;
 	private long registTime;
@@ -18,6 +19,7 @@ public class TaskWinXinActive extends TaskBase {
 	// private String phoneInfo; in super
 	private Integer status;
 	private String comment;
+	private String isOverSeas;
 
 	/**
 	 * 
@@ -25,19 +27,11 @@ public class TaskWinXinActive extends TaskBase {
 	public TaskWinXinActive() {
 		super();
 	}
-
-	/**
-	 * @param phoneNumber
-	 * @param password
-	 * @param registTime
-	 * @param firstFetchTime
-	 * @param lastFetchTime
-	 * @param lastLoginTime
-	 * @param status
-	 * @param comment
-	 */
-	public TaskWinXinActive(String phoneNumber, String password, long registTime, long firstFetchTime, long lastFetchTime, long lastLoginTime, Integer status, String comment) {
+	
+	public TaskWinXinActive(String weixinAccount, String phoneNumber, String password, long registTime, long firstFetchTime, long lastFetchTime, long lastLoginTime, Integer status,
+			String comment, String isOverSeas) {
 		super();
+		this.weixinAccount = weixinAccount;
 		this.phoneNumber = phoneNumber;
 		this.password = password;
 		this.registTime = registTime;
@@ -46,6 +40,17 @@ public class TaskWinXinActive extends TaskBase {
 		this.lastLoginTime = lastLoginTime;
 		this.status = status;
 		this.comment = comment;
+		this.isOverSeas = isOverSeas;
+	}
+
+
+
+	public String getWeixinAccount() {
+		return weixinAccount;
+	}
+
+	public void setWeixinAccount(String weixinAccount) {
+		this.weixinAccount = weixinAccount;
 	}
 
 	public String getPhoneNumber() {
@@ -55,7 +60,6 @@ public class TaskWinXinActive extends TaskBase {
 	public String getPassword() {
 		return password;
 	}
-
 	public long getRegistTime() {
 		return registTime;
 	}
@@ -112,12 +116,21 @@ public class TaskWinXinActive extends TaskBase {
 		this.comment = comment;
 	}
 
+	public String getIsOverSeas() {
+		return isOverSeas;
+	}
+
+	public void setIsOverSeas(String isOverSeas) {
+		this.isOverSeas = isOverSeas;
+	}
+
 	@Override
 	public String toString() {
-		return "TaskWinXinActive [phoneNumber=" + phoneNumber + ", password=" + password + ", registTime=" + registTime + ", firstFetchTime=" + firstFetchTime + ", lastFetchTime="
-				+ lastFetchTime + ", lastLoginTime=" + lastLoginTime + ", status=" + status + ", comment=" + comment + "]";
+		return "TaskWinXinActive [weixinAccount=" + weixinAccount + ", phoneNumber=" + phoneNumber + ", password=" + password + ", registTime=" + registTime + ", firstFetchTime="
+				+ firstFetchTime + ", lastFetchTime=" + lastFetchTime + ", lastLoginTime=" + lastLoginTime + ", status=" + status + ", comment=" + comment + ", isOverSeas="
+				+ isOverSeas + "]";
 	}
-	
+
 	public void setTaskInfo(advtaskinfo advinfo) {
 		this.setAdv_id(advinfo.getAdv_id());
 		this.setAdv_type(advinfo.getAdv_type());

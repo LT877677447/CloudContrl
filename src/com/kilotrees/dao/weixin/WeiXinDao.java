@@ -29,20 +29,22 @@ public class WeiXinDao {
 	 * @param phoneInfo
 	 * @param comment
 	 */
-	public static void newAccount(String autoid, String phoneNumber, String password, Date registTime, String appinfo, String phoneInfo, int status, String comment) {
+	public static void newAccount(String autoid, String weixinAccount,String phoneNumber, String password, Date registTime, String appinfo, String phoneInfo, int status, String comment,String isOverSeas) {
 		Connection connection = connectionmgr.getInstance().getConnection();
 		PreparedStatement ps = null;
-		String sql = "insert into " + tableName + "(autoid,phoneNumber,password,registTime,appinfo,phoneInfo,status,comment) values(?,?,?,?,?,?,?,?)";
+		String sql = "insert into " + tableName + "(autoid,weixinAccount,phoneNumber,password,registTime,appinfo,phoneInfo,status,comment,isOverSeas) values(?,?,?,?,?,?,?,?,?,?)";
 		try {
 			ps = connection.prepareStatement(sql);
 			ps.setString(1, autoid);
-			ps.setString(2, phoneNumber);
-			ps.setString(3, password);
-			ps.setTimestamp(4, new Timestamp(registTime.getTime()));
-			ps.setString(5, appinfo);
-			ps.setString(6, phoneInfo);
-			ps.setInt(7, status);
-			ps.setString(8, comment);
+			ps.setString(2, weixinAccount);
+			ps.setString(3, phoneNumber);
+			ps.setString(4, password);
+			ps.setTimestamp(5, new Timestamp(registTime.getTime()));
+			ps.setString(6, appinfo);
+			ps.setString(7, phoneInfo);
+			ps.setInt(8, status);
+			ps.setString(9, comment);
+			ps.setString(10, isOverSeas);
 			ps.executeUpdate();
 		} catch (Exception e) {
 			ErrorLog_service.system_errlog(e);

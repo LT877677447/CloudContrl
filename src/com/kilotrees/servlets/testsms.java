@@ -88,8 +88,10 @@ public class testsms extends HttpServlet {
 			}
 			JSONObject result = BeanService.getInstance().handleBeanReqeust(jsoRequest,null);
 			String str_result = result.toString();
+
 			//解决跨域
 			response.setHeader("Access-Control-Allow-Origin","*");
+			
 			response.getWriter().print(str_result);
 		} catch (JSONException e) {
 			e.printStackTrace();

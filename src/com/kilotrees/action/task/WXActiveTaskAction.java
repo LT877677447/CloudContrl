@@ -4,7 +4,6 @@
  */
 package com.kilotrees.action.task;
 
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,14 +11,17 @@ import com.kilotrees.action.ITaskAction;
 import com.kilotrees.dao.deviceinfodao;
 import com.kilotrees.dao.vpninfodao;
 import com.kilotrees.dao.task.WXActiveTaskDao;
-import com.kilotrees.model.bo.TaskBase;
 import com.kilotrees.model.po.ServerConfig;
 import com.kilotrees.model.po.vpninfo;
 import com.kilotrees.services.JsonActionService;
+import com.kilotrees.services.phonetype_service;
 
 public class WXActiveTaskAction implements ITaskAction {
-	private static Logger log = Logger.getLogger(WXActiveTaskAction.class);
 
+	private final int NETWORK_TYPE_SOCKS5 = 1;
+	private final int NETWORK_TYPE_VPN = 2;
+	private final int NETWORK_TYPE_4G = 3;
+	
 	@Override
 	public void handleTaskRequest(JSONObject request, JSONObject response) throws Exception {
 		JSONArray adtasks = response.optJSONArray("tasks");
@@ -32,74 +34,73 @@ public class WXActiveTaskAction implements ITaskAction {
 			return;
 		}
 
-		int taskPhase = adtask.optInt("taskPhase");
 		String packageName = adtask.optString("packageName");
-		String autoid = adtask.optString("autoid");
-		String zipFileName = "data_" + autoid + ".zip";
-		String zipFilePath = "files/zips/" + packageName + "/" + zipFileName;
+		String phoneNumber = adtask.optString("phoneNumber");
+		String isOverSeas = adtask.optString("isOverSeas");
+		
+ 
+		JSONObject phoneInfo = adtask.optJSONObject("phoneInfo");
+		JSONObject appInfo = adtask.optJSONObject("appInfo");
+		
+		int netType = NETWORK_TYPE_4G;
+		
+		if(netType == NETWORK_TYPE_4G) {
+			phonetype_service.setPhoneInfoIsUsingWifi(phoneInfo, false);
+		}
+		
+		if(netType == NETWORK_TYPE_VPN) {
+			String devicesUsingWuJiVPN = " ";
+			Boolean isUsingWuJiVPN = devicesUsingWuJiVPN.contains(dev_tag);
+			if (isUsingWuJiVPN) {
 
-		if (taskPhase == TaskBase.TASK_PHASE_REMAIN) {
-			// Download the remain zip file in phase remain
-			String zipDownloadURL = ServerConfig.getStorageBaseURL() + zipFilePath;
+				String wuJiVPNPackageName = "org.wuji";
+				String wuJiVPNAPKFileName = "wuji_duli_60.apk";
+				String wuJiVPNAPKurl = ServerConfig.getStoragePrivateBaseURL() + "/phone_files/update/wuji_duli_60.apk";
 
-			JSONObject action_UNZIP_FILE = JsonActionService.getFirstAction(prefix_task_actions, JsonActionService.ACTION_TYPE_UNZIP_FILE);
-			if (action_UNZIP_FILE != null) {
-				action_UNZIP_FILE.put("zip_file_name", zipFileName);
-				action_UNZIP_FILE.put("zip_download_url", zipDownloadURL);
-			} else {
-				action_UNZIP_FILE = JsonActionService.createAction_UNZIP_REMOTE_FILE(packageName, zipFileName, zipDownloadURL);
-				prefix_task_actions.put(action_UNZIP_FILE);
+				JSONObject install = JsonActionService.createAction_INSTALL_APP(wuJiVPNPackageName, wuJiVPNAPKFileName,
+						wuJiVPNAPKurl);
+				JSONObject stop = JsonActionService.createAction_STOP_APP(wuJiVPNPackageName);
+				JSONObject open = JsonActionService.createAction_OPEN_APP(wuJiVPNPackageName, 0);
+				JSONObject close = JsonActionService.createAction_CLOSE_APP(wuJiVPNPackageName, 0);
+
+				int vpnid = deviceinfodao.getDeviceInfo(dev_tag).getVpnid();
+				vpninfo vpnInfo = vpninfodao.getVpnById(vpnid);
+				open.put("vpnAccount", vpnInfo.getAccount());
+				open.put("vpnPassword", vpnInfo.getPass());
+
+				prefix_task_actions.put(install);
+				prefix_task_actions.put(stop);
+				prefix_task_actions.put(open);
+				suffix_task_actions.put(close);
+				suffix_task_actions.put(stop);
 			}
 		}
-
-		// VPN
-		String devicesUsingWuJiVPN = "";// 使用无极设备
-		Boolean isUsingWuJiVPN = devicesUsingWuJiVPN.contains(dev_tag);
-		if (!isUsingWuJiVPN) {
-			// socket5
+		
+		if(netType == NETWORK_TYPE_SOCKS5) {
 			String socket5PackageName = "org.proxydroid";
 			String socket5FileName = "org.proxydroidApp.apk";
-			String socket5APKurl = ServerConfig.getStoragePrivateBaseURL() + "/phone_files/update/org.proxydroidApp.apk";
-			
-			//测试用局域网，注释掉下面
-//			JSONObject jsonInstall = JsonActionService.createAction_INSTALL_APP(socket5PackageName, socket5FileName, socket5APKurl);
-//			prefix_task_actions.put(jsonInstall);
-//
-//			JSONObject jsonStop = JsonActionService.createAction_STOP_APP(socket5PackageName);
-//			prefix_task_actions.put(jsonStop);
-//
-//			JSONObject jsonOpen = JsonActionService.createAction_OPEN_APP(socket5PackageName, 0);
-//			prefix_task_actions.put(jsonOpen);
-//
-//			JSONObject jsonClose = JsonActionService.createAction_CLOSE_APP(socket5PackageName, 0);
-//			suffix_task_actions.put(jsonClose);
-//
-//			suffix_task_actions.put(jsonStop);
+			String socket5APKurl = ServerConfig.getStoragePrivateBaseURL()
+					+ "/phone_files/update/org.proxydroidApp.apk";
 
-		} else {
-			String wuJiVPNPackageName = "org.wuji";
-			String wuJiVPNAPKFileName = "wuji_duli_60.apk";
-			String wuJiVPNAPKurl = ServerConfig.getStoragePrivateBaseURL() + "/phone_files/update/wuji_duli_60.apk";
+			JSONObject jsonInstall = JsonActionService.createAction_INSTALL_APP(socket5PackageName, socket5FileName,
+					socket5APKurl);
+			prefix_task_actions.put(jsonInstall);
 
-			JSONObject install = JsonActionService.createAction_INSTALL_APP(wuJiVPNPackageName, wuJiVPNAPKFileName, wuJiVPNAPKurl);
-			JSONObject stop = JsonActionService.createAction_STOP_APP(wuJiVPNPackageName);
-			JSONObject open = JsonActionService.createAction_OPEN_APP(wuJiVPNPackageName, 0);
-			JSONObject close = JsonActionService.createAction_CLOSE_APP(wuJiVPNPackageName, 0);
+			JSONObject jsonStop = JsonActionService.createAction_STOP_APP(socket5PackageName);
+			prefix_task_actions.put(jsonStop);
 
-			int vpnid = deviceinfodao.getDeviceInfo(dev_tag).getVpnid();
-			vpninfo vpnInfo = vpninfodao.getVpnById(vpnid);
-			open.put("vpnAccount", vpnInfo.getAccount());
-			open.put("vpnPassword", vpnInfo.getPass());
+			JSONObject jsonOpen = JsonActionService.createAction_OPEN_APP(socket5PackageName, 0);
+			prefix_task_actions.put(jsonOpen);
 
-			prefix_task_actions.put(install);
-			prefix_task_actions.put(stop);
-			prefix_task_actions.put(open);
-			suffix_task_actions.put(close);
-			suffix_task_actions.put(stop);
+			JSONObject jsonClose = JsonActionService.createAction_CLOSE_APP(socket5PackageName, 0);
+			suffix_task_actions.put(jsonClose);
+
+			suffix_task_actions.put(jsonStop);
 		}
 
 		// prefix action
-		JSONObject jsonInstall = JsonActionService.createAction_INSTALL_APP("com.vfive.romservertester", "RomserverTester.apk",
+		JSONObject jsonInstall = JsonActionService.createAction_INSTALL_APP("com.vfive.romservertester",
+				"RomserverTester.apk",
 				ServerConfig.getStoragePrivateBaseURL() + "/phone_files/other/RomserverTester.apk");
 		prefix_task_actions.put(jsonInstall);
 
@@ -112,38 +113,69 @@ public class WXActiveTaskAction implements ITaskAction {
 		JSONObject sleep = JsonActionService.createAction_SLEEP(2000);
 		prefix_task_actions.put(sleep);
 
-		JSONObject command2 = JsonActionService.createAction_EXEC_COMMANDS("input keyevent 4 ");// 返回的actions
+		JSONObject command2 = JsonActionService.createAction_EXEC_COMMANDS("input keyevent 4 ");
 		prefix_task_actions.put(command2);
-
+		
 		JSONObject sleepAction = JsonActionService.createAction_SLEEP(3000);
 		prefix_task_actions.put(sleepAction);
-
-		// 2. suffix_task_actions
-		String zipfiles = adtask.optString("zipfiles");
-		String notZipRegex = adtask.optString("unzip_regex");
-
-		String resourceUploadURL = ServerConfig.getFileServerServlet("ResourceUpload");
-		String zipUploadURL = resourceUploadURL + "?fileName=" + zipFilePath;
-
-		JSONObject action_ZIP_FILE = JsonActionService.getFirstAction(suffix_task_actions, JsonActionService.ACTION_TYPE_ZIP_FILE);
-		if (action_ZIP_FILE != null) {
-			action_ZIP_FILE.put("zip_file_name", zipFileName);
-			action_ZIP_FILE.put("zip_upload_url", zipUploadURL);
-		} else {
-			action_ZIP_FILE = JsonActionService.createAction_ZIP_FILE(packageName, zipFileName, zipUploadURL, zipfiles, notZipRegex);
-			suffix_task_actions.put(action_ZIP_FILE);
+		
+		String zipEventFileName = "getevent.zip";
+		String zipEventFilePath = "Resources/QQ/" + zipEventFileName;
+		String zipEventDownloadURL = ServerConfig.getStorageBaseURL() + zipEventFilePath;
+		
+		JSONObject action_unzip_event = JsonActionService.createAction_UNZIP_REMOTE_FILE(packageName, zipEventFileName,
+				zipEventDownloadURL);
+		prefix_task_actions.put(action_unzip_event);
+		
+		if(netType == NETWORK_TYPE_4G) {
+			
+			//做之前关 wifi 做完开wifi(最后做)
+			JSONObject disableWifi = JsonActionService.createAction_DISABLE_WIFI();
+			prefix_task_actions.put(disableWifi);
+			
+			// 打开 wifi 要在上传Zip之前
+			JSONObject enableWifi = JsonActionService.createAction_ENABLE_WIFI();
+//			suffix_task_actions.put(enableWifi);
+			int index = JsonActionService.getFirstIndexOfAction(suffix_task_actions, JsonActionService.ACTION_TYPE_ZIP_FILE);
+			JsonActionService.insertAction(suffix_task_actions, enableWifi, index);
+			
 		}
-
+		
 		// phoneInfo
-		JSONObject phoneInfo = adtask.optJSONObject("phoneInfo");
 		phoneInfo.remove("Build.VERSION.SDK");
 		phoneInfo.remove("Build.VERSION.SDK_INT");
 		phoneInfo.remove("Screen.widthPixels");
 		phoneInfo.remove("Screen.heightPixels");
 		
-		//appinfo
-//		JSONObject appinfo = adtask.optJSONObject("appInfo");
-//		appinfo.put("phase", "active");
+		//appInfo
+		appInfo.put("phase", "active");
+		
+		int accountType;
+//		if(phoneNumber.startsWith("00")){
+		if(isOverSeas.equals("true")){
+			accountType = 2;
+		}else {
+			accountType = 1;
+		}
+		appInfo.put("AccountType", accountType);
+		JSONArray array1 = new JSONArray();
+		if(accountType == 2) {
+		//海外
+			array1.put("START_DAEMON_WECHAT_READ");  //开户刷阅读线程
+			array1.put("COMPLETE_PROFILE_AvatarNickname");  //昵称
+			array1.put("COMPLETE_PROFILE_AccountQRCode");  //账号
+			array1.put("COMPLETE_PROFILE_SexLocationStatus"); //性别
+			array1.put("CHANGE_PASSWORD"); //密码
+			array1.put("POST_ONE_TIMELINE"); //发一条朋友圈
+			array1.put("SCAN_ALL_TIMELINE"); //浏览所有朋友圈
+		}
+		if(accountType == 1) {
+		//正常账号
+			array1.put("POST_ONE_TIMELINE"); //发一条朋友圈
+			array1.put("SCAN_ALL_TIMELINE"); //浏览所有朋友圈
+		}
+		appInfo.put("behaviors", array1);
+		
 	}
 
 	@SuppressWarnings("unused")

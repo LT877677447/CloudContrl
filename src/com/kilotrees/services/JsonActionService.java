@@ -188,6 +188,10 @@ public class JsonActionService {
 	
 	public static final String ACTION_TYPE_SWITCH_WIFI = "SWITCH_WIFI";
 	
+	public static final String ACTION_TYPE_ENABLE_WIFI = "ENABLE_WIFI";
+	
+	public static final String ACTION_TYPE_DISABLE_WIFI = "DISABLE_WIFI";
+	
 	public static final String ACTION_TYPE_ACCESSIBILITY = "ACCESSIBILITY";
 	
 	/**
@@ -213,6 +217,16 @@ public class JsonActionService {
 		return null;
 	}
 
+	public static int getFirstIndexOfAction(JSONArray prefix_suffix_actions, String actionKey) {
+		for (int i = 0; i < prefix_suffix_actions.length(); i++) {
+			JSONObject actionJson = prefix_suffix_actions.optJSONObject(i);
+			if (actionJson.optString("action").equals(actionKey)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	public static void insertAction(JSONArray prefix_suffix_actions, JSONObject action, int atIndex) {
 		JSONArrayUtil.insert(prefix_suffix_actions, action, atIndex);
 	}
@@ -521,6 +535,18 @@ public class JsonActionService {
 			action.put("intent_action", switch_timeout);
 		}
 		
+		return action;
+	}
+	
+	public static JSONObject createAction_ENABLE_WIFI() throws JSONException {
+		JSONObject action = new JSONObject();
+		action.put("action", ACTION_TYPE_ENABLE_WIFI);
+		return action;
+	}
+	
+	public static JSONObject createAction_DISABLE_WIFI() throws JSONException {
+		JSONObject action = new JSONObject();
+		action.put("action", ACTION_TYPE_DISABLE_WIFI);
 		return action;
 	}
 	

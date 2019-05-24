@@ -3,7 +3,10 @@ package com.kilotrees.util;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.junit.Test;
 
 import com.kilotrees.dao.connectionmgr;
 
@@ -37,6 +40,13 @@ public class CommonUtil {
 			tempArray[indexOfMax] = -1;
 		}
 		return arrayAfterOrder;
+	}
+	
+	@Test
+	public void t1() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		System.out.println(dateFormat.format(new Date()));
+		
 	}
 	
 }

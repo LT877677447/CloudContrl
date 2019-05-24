@@ -408,7 +408,7 @@ public class cpanewruntime extends advruntimebase{
 			}				
 		}
 		// 如果是冲量包或空闲设备足够，继续分配
-		actdeviceinfo_service.getInstance().allocatDeviceForSigleAdv(adv_id, this.reqDevDoCount, alloc_type);
+//		actdeviceinfo_service.getInstance().allocatDeviceForSigleAdv(adv_id, this.reqDevDoCount, alloc_type);
 		advinfo.setOnlineflag(1);
 		advinfo.setOnline_time(new Date());
 		advtaskinfodao.updateOnlineFlag(advinfo);
@@ -555,12 +555,12 @@ public class cpanewruntime extends advruntimebase{
 				//2018-12-6
 				freecount = actdeviceinfo_service.getInstance().getFreeCount();
 				if(freecount >= diff){
-					actdeviceinfo_service.getInstance().allocatDeviceForSigleAdv(adv_id, diff, alloc_type);
+//					actdeviceinfo_service.getInstance().allocatDeviceForSigleAdv(adv_id, diff, alloc_type);
 					act_alloc_timeout = null;
 					return;
 				}
 				else if(freecount > 0 && this.advinfo.getOnlineflag() != 3)
-					actdeviceinfo_service.getInstance().allocatDeviceForSigleAdv(adv_id, freecount, alloc_type);
+//					actdeviceinfo_service.getInstance().allocatDeviceForSigleAdv(adv_id, freecount, alloc_type);
 				if(freecount == 0)
 					log.error("超时时间已过，但空闲设备不足,请减少任务数或增加设备");
 				return;				

@@ -126,7 +126,21 @@ public class JsonTaskService {
 		JSONObject appInfo = task.getAppInfo();
 		JSONObject phoneInfo = task.getPhoneInfo();
 
-		JSONObject unstableInfo = phonetype_service.reandomTheUnstablePhoneInfo(phoneInfo, appInfo, true);
+		JSONObject unstableInfo = phonetype_service.reandomTheUnstablePhoneInfo(phoneInfo);
+		
+		// 改变wifi扫描信息
+		boolean isChangeTheWifiScanResult = new Random().nextInt(5) == 1;
+		if (isChangeTheWifiScanResult) {
+			if (appInfo != null) {
+				JSONObject connectionInfo = phoneInfo.optJSONObject("Wifi.ConnectionInfo");
+				String bssid = connectionInfo.optString("BSSID");
+				String wifiName = connectionInfo.optString("SSID");
+				String macAddress = connectionInfo.optString("MacAddress");
+				JSONArray wifiScanResults = phonetype_service.createWifiScanResults(bssid, wifiName, macAddress);
+				appInfo.put("Wifi.ScanResults", wifiScanResults);
+			}
+		}
+		
 		JSONObjectUtil.mergeJSONObject(phoneInfo, unstableInfo);
 		
 		return createJsonObjectFromTask(task);

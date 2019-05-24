@@ -77,12 +77,14 @@ public class WeixinServlet extends HttpServlet {
 
 			if (!checkRequestJson(requestJson, "action")) {
 				errorMessage = "request missing parameter [action] or request is not json format";
+//				errorMessage = errorMessage.replaceAll("\r|\n", "");
 			} else if (checkRequestJson(requestJson, "error_message")) {
 				errorMessage = requestJson.optString("error_message");
+				errorMessage = errorMessage.replaceAll("\r|\n", "");
 				service.writeLog("error", errorMessage, "客户端主动上传的error", new Date());
 			}
 
-			if (errorMessage != null) {
+			if (!StringUtil.isStringEmpty(errorMessage)) {
 				responseJson.put("errorMessage", errorMessage);
 				encryptResponseBytes = responseJson.toString().getBytes();
 
@@ -90,10 +92,15 @@ public class WeixinServlet extends HttpServlet {
 
 				String action = requestJson.optString("action");
 				String strAccount = requestJson.optString("account");
+				//2019-5-10  创建账号时，带上手机号，密码
+				String phoneNumber = requestJson.optString("phoneNumber");
+				String password = requestJson.optString("password");
+				
+				
 				//only wxid_rqdzi0vhv7h222 wxid_3kehd9ys2m1922
-				if(strAccount.equals("wxid_rqdzi0vhv7h222") || strAccount.equals("wxid_u7j58r3t6lqp22")) {
-					return;
-				}
+//				if(strAccount.equals("wxid_rqdzi0vhv7h222") || strAccount.equals("wxid_u7j58r3t6lqp22")) {
+//					return;
+//				}
 				
 				// 1. action is links
 				if (action.equals("links") && !StringUtil.isStringEmpty(strAccount)) {
@@ -117,7 +124,7 @@ public class WeixinServlet extends HttpServlet {
 						
 						int successCount = 0;
 						int failedCount = 0;
-						Iterator it = brush_status.keys();
+						Iterator<String> it = brush_status.keys();
 						while (it.hasNext()) {
 							// key : link value:true false null
 							String strLink = (String) it.next();
@@ -126,23 +133,8 @@ public class WeixinServlet extends HttpServlet {
 								continue;
 							}
 							
-							Object value = brush_status.opt(strLink);
-							boolean success = false;
-							if(value instanceof String ) {
-								String str = (String) value;
-								if(str.equals("null")) {
-									success = false;
-								}
-							}
-							if(value instanceof Boolean) {
-								Boolean boo = (Boolean) value;
-								if(boo) {
-									success = true;
-								}else {
-									success = false;
-								}
-							}
-							if(success) {
+							int status = brush_status.optInt(strLink);
+							if(status == 0) {
 								//去fail表删除记录，link阅读数+1，判断是否全部做完了，
 								service.handleSuccess(account,link);
 								successCount++;

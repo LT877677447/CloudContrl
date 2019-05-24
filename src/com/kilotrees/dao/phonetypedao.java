@@ -176,5 +176,27 @@ public class phonetypedao {
 		}
 		return list;
 	}
+	
+	public static synchronized ArrayList<String> getPhoneInfo(String tableName,String key) {
+		ArrayList<String> list = new ArrayList<String>();
+		PreparedStatement ps = null;
+		Connection con = connectionmgr.getInstance().getConnection();
+		String sql = "SELECT  "+key+" FROM " + tableName ;
+		try {
+			ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				 String s = rs.getString(key);
+				 list.add(s);
+			}
+			rs.close();
+		} catch (Exception e) {
+			ErrorLog_service.system_errlog(e);
+			log.error(e.getMessage(), e);
+		} finally {
+			connectionmgr.getInstance().closeConnection(con, ps);
+		}
+		return list;
+	}
 
 }

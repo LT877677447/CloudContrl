@@ -152,7 +152,7 @@ public class OPPOMarketTaskAction implements ITaskAction {
 		JSONObject stableInfo = phonetype_service.reandomTheStablePhoneInfo(phinfo);
 		JSONObjectUtil.mergeJSONObject(phinfo, stableInfo);
 
-		JSONObject unstableInfo = phonetype_service.reandomTheUnstablePhoneInfo(phinfo, null, false);
+		JSONObject unstableInfo = phonetype_service.reandomTheUnstablePhoneInfo(phinfo);
 		JSONObjectUtil.mergeJSONObject(phinfo, unstableInfo);
 
 		phinfo.remove("Screen.widthPixels");

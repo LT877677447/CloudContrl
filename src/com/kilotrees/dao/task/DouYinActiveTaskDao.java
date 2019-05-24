@@ -27,7 +27,7 @@ import com.kilotrees.services.ErrorLog_service;
 public class DouYinActiveTaskDao implements ITaskDao {
 	private static Logger log = Logger.getLogger(DouYinActiveTaskDao.class);
 
-	private static boolean refreshed = false;
+	private static boolean refreshed = true;
 	private static Timer timer = null;
 	private static final String tableName = "tb_DouYinAccount";
 

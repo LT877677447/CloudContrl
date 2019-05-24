@@ -80,14 +80,14 @@ public class SMSplatform_XiaoXuanFeng extends ServerBeanBase {
 		String dev_tag = jsoRequest.optString("dev_tag");
 		int adv_id = jsoRequest.optInt("adv_id");
 		try {
-			//临时测试加的
+			//临时测试加的(1/2)
 //			byte[] bs = FileUtil.readBytes("F:\\共享文件夹\\手机号.txt");
 //			byte[] bs2 = FileUtil.readBytes("F:\\共享文件夹\\验证码.txt");
 //			String phoneNum = new String(bs);
 //			String code = new String(bs2);
 			
 			if (smsType.equals("getmobile")) {
-				//test
+				//test(2/2)
 //				jsoRet.put("mobile", phoneNum);
 //				return jsoRet;
 				
@@ -150,13 +150,14 @@ public class SMSplatform_XiaoXuanFeng extends ServerBeanBase {
 				jsoRet.put("seqid", sms.getSeqid());
 				jsoRet.put("mobile", sms.getMobile());
 			} else if (smsType.equals("getsms")) {
-				//test
-				jsoRet.put("mobile", smsJso.optString("mobile"));
+				//test(1/1)
+//				jsoRet.put("mobile", phoneNum);
 //				jsoRet.put("smstext", code);
 //				return jsoRet;
 				
 				//客户端10秒钟取一次，最多取3-6次，  
 				String mobile = smsJso.optString("mobile");//
+				jsoRet.put("mobile", mobile);
 				Long seqid = smsJso.optLong("seqid");
 				sms_checkcode sms = new sms_checkcode();
 				sms.setAdv_id(adv_id);
@@ -189,10 +190,7 @@ public class SMSplatform_XiaoXuanFeng extends ServerBeanBase {
 					String data = contStr.substring(contStr.indexOf("data")+6, contStr.indexOf(",", contStr.indexOf("data")+6)).trim();
 					//1554120877
 					String timestamp = contStr.substring(contStr.indexOf("timestamp")+11, contStr.indexOf("}", contStr.indexOf("timestamp")+11)).trim();
-					if(contStr.contains("ok") || contStr.contains("200")) {
-						log.info("!!!!!!!!!!!!!!!!!!"+contStr);
-					}
-					
+
 					if (message.contains("ok") && !data.equals("null")) {
 						//成拿到验证码
 						String smstext = contStr.trim();
@@ -227,6 +225,9 @@ public class SMSplatform_XiaoXuanFeng extends ServerBeanBase {
 	public static void main(String[] argv) {
 		String s = "success|abc";
 		int pos = s.indexOf("success|");
+		
+		String aString = new SMSplatform_XiaoXuanFeng().encryption("business_id=12&city=&isp=0&nonce_str=1558066386640686&province=&user_id=10187");
+		System.out.println(aString);
 		System.out.println(s.substring(pos + "success|".length()));
 	}
 

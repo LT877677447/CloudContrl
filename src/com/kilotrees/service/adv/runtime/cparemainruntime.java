@@ -390,7 +390,7 @@ public class cparemainruntime extends advruntimebase{
 			log.error("广告分配设备不足,空闲设备数：" + actdeviceinfo_service.getInstance().getFreeCount());
 			return false;
 		}
-		actdeviceinfo_service.getInstance().allocatDeviceForSigleAdv( this.advinfo.getAdv_id(), this.reqDevDoCount, alloc_type);
+//		actdeviceinfo_service.getInstance().allocatDeviceForSigleAdv( this.advinfo.getAdv_id(), this.reqDevDoCount, alloc_type);
 		return true;
 		//
 		// return alloc_init;
@@ -496,12 +496,12 @@ public class cparemainruntime extends advruntimebase{
 				//2018-12-6
 				freecount = actdeviceinfo_service.getInstance().getFreeCount();
 				if(freecount >= diff){
-					actdeviceinfo_service.getInstance().allocatDeviceForSigleAdv(adv_id, diff, alloc_type);
+//					actdeviceinfo_service.getInstance().allocatDeviceForSigleAdv(adv_id, diff, alloc_type);
 					act_alloc_timeout = null;
 					return;
 				}
 				else if(freecount > 0)
-					actdeviceinfo_service.getInstance().allocatDeviceForSigleAdv(adv_id, freecount, alloc_type);
+//					actdeviceinfo_service.getInstance().allocatDeviceForSigleAdv(adv_id, freecount, alloc_type);
 				if(freecount == 0)
 					log.error("留存超时时间已过，但空闲设备不足,请减少任务数或增加设备");
 				return;				

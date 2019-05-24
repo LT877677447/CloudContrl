@@ -43,15 +43,15 @@
 	},
 	
 	"update_rom_server": {
-		"latest_version": 131,
+		"latest_version": 135,
 		"update_url": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/romserver/RomServer.apk",
 		"update_devices": []
 	},
 	
 	
 	"update_rom_files": {
-		"latest_version": 132,
-		"cmd.acmd": {
+		"latest_version": 135,
+		"_cmd.acmd": {
 			"latest_version": 132,
 			"execute_command": "input keyevent 26",
 			"update_devices": [],
@@ -69,12 +69,6 @@
 			"update_devices": [],
 			"reboot": false
 		},
-		"_cmd.dcmd": {
-			"latest_version": 82,
-			"execute_command": "input keyevent 26",
-			"update_devices": [],
-			"reboot": false
-		},
 		"_zip.azip": {
 			"latest_version": 48,
 			"update_url-cm_cancro-4.4.4": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/update/system_framework_service.zip",
@@ -83,7 +77,7 @@
 			"reboot": true
 		},
 		"/system/app/RomServer_signed_aligned.apk": {
-			"latest_version": 130,
+			"latest_version": 135,
 			"update_url": "http://[STATIC_FILE_IP]:[STATIC_FILE_PORT]/storage_private/phone_files/romserver/RomServer_signed_aligned.apk",
 			"update_devices": [],
 			"reboot": true

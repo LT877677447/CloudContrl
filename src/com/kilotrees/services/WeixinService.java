@@ -189,7 +189,6 @@ public class WeixinService {
 	}
 	
 	
-	
 	public tb_weixinlink getSingleLink(String strLink) {
 		return dao.getSingleLink(strLink);
 	}

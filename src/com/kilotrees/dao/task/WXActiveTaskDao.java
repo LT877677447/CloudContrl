@@ -166,6 +166,7 @@ public class WXActiveTaskDao implements ITaskDao{
 			if (rs.next()) {
 				model = new TaskWinXinActive();
 				model.setAutoid(rs.getLong("autoid"));
+				model.setWeixinAccount(rs.getString("weixinAccount"));
 				model.setPhoneNumber(rs.getString("phoneNumber"));
 				model.setPassword(rs.getString("password"));
 				
@@ -194,6 +195,7 @@ public class WXActiveTaskDao implements ITaskDao{
 				
 				model.setStatus(rs.getInt("status"));
 				model.setComment(rs.getString("comment"));
+				model.setIsOverSeas(rs.getString("isOverSeas"));
 			}
 		} catch (Exception e) {
 			ErrorLog_service.system_errlog(e);
